@@ -27,31 +27,31 @@ RUN cd /ComfyUI/custom_nodes/ && \
     cd ComfyUI-KJNodes && \
     pip install --no-cache-dir -r requirements.txt
 
-# Download models (huggingface-cli + hf_transfer: already-installed pip package, no new apt dependency)
+# Download models (huggingface-cli + hf_transfer; find handles either nested or flat --local-dir layout)
 RUN mkdir -p /ComfyUI/models/diffusion_models /ComfyUI/models/loras /ComfyUI/models/text_encoders /ComfyUI/models/vae
 
 RUN huggingface-cli download Comfy-Org/Qwen-Image-Edit_ComfyUI \
     split_files/diffusion_models/qwen_image_edit_2511_fp8mixed.safetensors \
     --local-dir /tmp/dl1 && \
-    mv /tmp/dl1/split_files/diffusion_models/qwen_image_edit_2511_fp8mixed.safetensors /ComfyUI/models/diffusion_models/ && \
+    find /tmp/dl1 -name "qwen_image_edit_2511_fp8mixed.safetensors" -exec mv {} /ComfyUI/models/diffusion_models/ \; && \
     rm -rf /tmp/dl1
 
 RUN huggingface-cli download lightx2v/Qwen-Image-Edit-2511-Lightning \
     Qwen-Image-Edit-2511-Lightning-4steps-V1.0-bf16.safetensors \
     --local-dir /tmp/dl2 && \
-    mv /tmp/dl2/Qwen-Image-Edit-2511-Lightning-4steps-V1.0-bf16.safetensors /ComfyUI/models/loras/ && \
+    find /tmp/dl2 -name "Qwen-Image-Edit-2511-Lightning-4steps-V1.0-bf16.safetensors" -exec mv {} /ComfyUI/models/loras/ \; && \
     rm -rf /tmp/dl2
 
 RUN huggingface-cli download Comfy-Org/Qwen-Image_ComfyUI \
     split_files/text_encoders/qwen_2.5_vl_7b_fp8_scaled.safetensors \
     --local-dir /tmp/dl3 && \
-    mv /tmp/dl3/split_files/text_encoders/qwen_2.5_vl_7b_fp8_scaled.safetensors /ComfyUI/models/text_encoders/ && \
+    find /tmp/dl3 -name "qwen_2.5_vl_7b_fp8_scaled.safetensors" -exec mv {} /ComfyUI/models/text_encoders/ \; && \
     rm -rf /tmp/dl3
 
 RUN huggingface-cli download Comfy-Org/Qwen-Image_ComfyUI \
     split_files/vae/qwen_image_vae.safetensors \
     --local-dir /tmp/dl4 && \
-    mv /tmp/dl4/split_files/vae/qwen_image_vae.safetensors /ComfyUI/models/vae/ && \
+    find /tmp/dl4 -name "qwen_image_vae.safetensors" -exec mv {} /ComfyUI/models/vae/ \; && \
     rm -rf /tmp/dl4
 
 COPY . .
