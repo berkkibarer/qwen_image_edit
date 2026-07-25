@@ -257,8 +257,16 @@ def handler(job):
         prompt[_NODE_IMAGE_3]["inputs"]["image"] = image_paths[2]
 
     prompt[_NODE_PROMPT]["inputs"]["prompt"] = job_input.get("prompt", "")
+    if _NODE_NEGATIVE_PROMPT in prompt and "negative_prompt" in job_input:
+        prompt[_NODE_NEGATIVE_PROMPT]["inputs"]["prompt"] = job_input["negative_prompt"]
     if _NODE_SEED in prompt and "seed" in job_input:
         prompt[_NODE_SEED]["inputs"]["seed"] = job_input["seed"]
+    if _NODE_SEED in prompt and "steps" in job_input:
+        prompt[_NODE_SEED]["inputs"]["steps"] = job_input["steps"]
+    if _NODE_SEED in prompt and "cfg" in job_input:
+        prompt[_NODE_SEED]["inputs"]["cfg"] = job_input["cfg"]
+    if _NODE_SEED in prompt and "denoise" in job_input:
+        prompt[_NODE_SEED]["inputs"]["denoise"] = job_input["denoise"]
     if _NODE_WIDTH in prompt and "width" in job_input:
         prompt[_NODE_WIDTH]["inputs"]["value"] = job_input["width"]
     if _NODE_HEIGHT in prompt and "height" in job_input:
